@@ -5,19 +5,27 @@ Python module returns information about his/her TODO list progress.
 import requests
 import sys
 
-
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("UsageError: python3 {} employee_id(int)".format(__file__))
         sys.exit(1)
 
     URL = "https://jsonplaceholder.typicode.com"
-    EMP_ID = sys.argv[1]
+    EMP_ID = int(sys.argv[1]) # Convert EMP_ID to integer
 
-    response = requests.get(
-        "{}/users/{}/todos".format(URL, EMP_ID),
-        params={"_expand": "user"}
-    )
+    try:
+        response = requests.get(
+            "{}/users/{}/todos".format(URL, EMP_ID),
+            params={"_expand": "user"}
+        )
+        response.raise_for_status() # Raise an exception if the request failed
+    except requests.exceptions.HTTPError as http_err:
+        print(f'HTTP error occurred: {http_err}')
+        sys.exit(1)
+    except Exception as err:
+        print(f'Other error occurred: {err}')
+        sys.exit(1)
+
     data = response.json()
 
     emp_name = data[0]["user"]["name"]
