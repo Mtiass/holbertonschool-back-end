@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """
-Python module returns information about his/her TODO list progress and exports it to a CSV file.
+Python module returns information about his/her TODO list progress and exports
+it to a CSV file.
 """
 import requests
 import csv
@@ -18,7 +19,12 @@ if __name__ == '__main__':
     # Prepare the CSV file
     csv_filename = "{}.csv".format(user_id)
     with open(csv_filename, 'w', newline='') as csvfile:
-        fieldnames = ["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"]
+        fieldnames = [
+                "USER_ID",
+                "USERNAME",
+                "TASK_COMPLETED_STATUS",
+                "TASK_TITLE"
+                ]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         # Write the header
@@ -29,7 +35,8 @@ if __name__ == '__main__':
             writer.writerow({
                 "USER_ID": user_id,
                 "USERNAME": user_data["username"],
-                "TASK_COMPLETED_STATUS": "Completed" if task["completed"] else "Not Completed",
+                "TASK_COMPLETED_STATUS": "Completed"
+                if task["completed"] else "Not Completed",
                 "TASK_TITLE": task["title"]
             })
 
