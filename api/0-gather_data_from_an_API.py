@@ -3,37 +3,24 @@
 Python module returns information about his/her TODO list progress.
 """
 import requests
-import sys
+from sys import argv
 
-if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        print("UsageError: python3 {} employee_id(int)".format(__file__))
-        sys.exit(1)
 
+if __name__ == '__main__':
     URL = "https://jsonplaceholder.typicode.com"
-    EMP_ID = int(sys.argv[1]) # Convert EMP_ID to integer
+    response = requests.get("{}/users/{}".format(URL, argv[1]))
+    user = user_response.json()
 
-    try:
-        response = requests.get(
-            "{}/users/{}/todos".format(URL, EMP_ID),
-            params={"_expand": "user"}
-        )
-        response.raise_for_status() # Raise an exception if the request failed
-    except requests.exceptions.HTTPError as http_err:
-        print(f'HTTP error occurred: {http_err}')
-        sys.exit(1)
-    except Exception as err:
-        print(f'Other error occurred: {err}')
-        sys.exit(1)
+    todo_resp = requests.get("{}/todos?userId={]}".format(URL, argv[1]))
+    todo_data = todo_resp.json()
 
-    data = response.json()
+    completed = [task for task in todo_data if task["completed"]]
 
-    emp_name = data[0]["user"]["name"]
-    total_tasks = len(data)
-    done_tasks = [task for task in data if task["completed"]]
-    total_done_tasks = len(done_tasks)
+    emp_name = user_data["name"]
+    taskcom_num = len(completed)
+    total_tasks = len(todo_data)
+    print("Employee {} is done with tasks({}/{}):".format(
+        emp_name, taskcom_num, total_tasks))
 
-    print("Employee {} is done with tasks".format(emp_name),
-          "({}/{}):".format(total_done_tasks, total_tasks))
-    for task in done_tasks:
+    for task in completed:
         print("\t {}".format(task['title']))
