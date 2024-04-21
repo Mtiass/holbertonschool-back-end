@@ -7,7 +7,11 @@ import requests
 import csv
 from sys import argv
 
+
 if __name__ == '__main__':
+    """
+    script to export data in the CSV format
+    """
     URL = "https://jsonplaceholder.typicode.com"
     user_id = argv[1]
     response = requests.get("{}/users/{}".format(URL, user_id))
