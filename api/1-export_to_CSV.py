@@ -20,7 +20,6 @@ if __name__ == '__main__':
     todo_resp = requests.get("{}/todos?userId={}".format(URL, user_id))
     todo_data = todo_resp.json()
 
-    # Prepare the CSV file
     csv_filename = "{}.csv".format(user_id)
     with open(csv_filename, 'w', newline='') as csvfile:
         fieldnames = [
@@ -31,10 +30,8 @@ if __name__ == '__main__':
                 ]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-        # Write the header
         writer.writeheader()
 
-        # Write task data
         for task in todo_data:
             writer.writerow({
                 "USER_ID": user_id,
